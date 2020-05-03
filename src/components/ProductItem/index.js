@@ -1,31 +1,70 @@
 import React, {Component} from 'react';
-import {Text, View, Image, Button, StyleSheet} from 'react-native';
-
+import {
+  Text,
+  View,
+  Image,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {connect} from 'react-redux';
 export class ProductItem extends Component {
+  addToCart = () => {
+    // dispath request to store for edit data of cart
+    this.props.dispatch({
+      // type is must be
+      type: 'ADD_TO_CART',
+      // payload is optional
+      payload: this.props.product,
+    });
+  };
   render() {
     let {product} = this.props;
-    console.log(product.img);
     return (
-      <View>
-        <Text> Image</Text>
+      <View style={styles.productContainer}>
         <Image
           resizeMode="cover"
           source={{uri: product.img}}
           style={styles.imageStyle}
         />
-        <Text> Name {product.name}</Text>
-        <Text> Price {product.price}</Text>
-        <Button title="Add to Cart" />
+        <Text> Name: {product.name}</Text>
+        <Text> Price: {product.price}</Text>
+        <TouchableOpacity style={styles.button} onPress={this.addToCart}>
+          <Text>Add to Cart</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  productContainer: {
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    margin: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    elevation: 6,
+  },
   imageStyle: {
-    height: 100,
+    height: 170,
     width: 100,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#00ffff',
+    padding: 10,
+    margin: 10,
+    width: '95%',  
+    borderRadius: 30,
   },
 });
 
-export default ProductItem;
+export default connect()(ProductItem);

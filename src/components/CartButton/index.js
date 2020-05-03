@@ -3,32 +3,57 @@ import {Text, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {withNavigation} from '@react-navigation/compat';
+import {connect} from 'react-redux';
 
 export class CartButton extends Component {
+  state={
+    productTotal: 0
+  }
   goToCart = () => {
+    this.props.dispatch({
+      type: 'SHOW_CART_ITEM',
+    });
     this.props.navigation.navigate('Cart');
   };
   render() {
     return (
       <TouchableOpacity onPress={this.goToCart} style={styles.container}>
-        <Icon name="shopping-cart" size={30} />
+        <Icon name="shopping-cart" size={20} />
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>0</Text>
+          <Text style={styles.badgeText}>{this.props.productTotal  +1}</Text>
         </View>
       </TouchableOpacity>
     );
+  }
+
+  componentDidUpdate=(prevProps)=>{
+    if(this.countsProduct(prevProps.cartList) > this.countsProduct(this.props.cartList)){
+      this.setState({
+        productTotal: this.countsProduct(this.props.cartList)
+      })
+    }
+
+  }
+  countsProduct = (cartList)=>{
+    let count = 0;
+    if(cartList.length > 0){
+      cartList.map(item =>count+=item.quantity);
+    }
+    console.log(count);
+    return count;
   }
 }
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    marginRight: 20,
+    marginRight: 40,
+    padding: 10,
   },
   badge: {
     position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: '#000',
+    top: 2,
+    right: 2,
+    backgroundColor: '#ff0000',
     width: 15,
     height: 15,
     borderRadius: 20,
@@ -41,4 +66,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(CartButton);
+const mapStateToProps = state => {
+  return {
+    cartList: state.carts,
+  };
+};
+
+export default connect(mapStateToProps)(withNavigation(CartButton));
