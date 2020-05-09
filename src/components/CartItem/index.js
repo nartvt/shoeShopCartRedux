@@ -2,19 +2,18 @@ import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet, Alert} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
+import {
+  actionIncreaseQuantity,
+  actionDecreaseQuantity,
+  actionRemoveItem,
+} from '../../redux/actions';
 
 export class CartItem extends Component {
   decreaseCartItem = () => {
-    this.props.dispatch({
-      type: 'DECREASE_QUANTITY',
-      payload: this.props.item.product.id,
-    });
+    this.props.dispatch(actionDecreaseQuantity(this.props.item.product.id));
   };
   increaseCartItem = () => {
-    this.props.dispatch({
-      type: 'INCREASE_QUANTITY',
-      payload: this.props.item.product.id,
-    });
+    this.props.dispatch(actionIncreaseQuantity(this.props.item.product.id));
   };
   showAlert = () => {
     Alert.alert('Confirmation', 'Make sure for delete item ?', [
@@ -30,10 +29,18 @@ export class CartItem extends Component {
     }
   };
   removeItem = () => {
-    this.props.dispatch({
-      type: 'REMOVE_CART_ITEM',
-      payload: this.props.item.product.id,
-    });
+    this.props.dispatch(
+      actionRemoveItem({
+        id: this.props.item.product.id,
+        callBack: this.showMessage,
+      }),
+    );
+  };
+  showMessage = () => {
+    Alert.alert('Infomation', 'Remove Success ! ', [
+      {text: 'Cancel', onPress: () => {}},
+      {text: 'OK', onPress: () => {}},
+    ]);
   };
   render() {
     const {item} = this.props;

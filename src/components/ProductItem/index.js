@@ -8,15 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {connect} from 'react-redux';
+import {actionAddToCart} from '../../redux/actions';
 export class ProductItem extends Component {
   addToCart = () => {
     // dispath request to store for edit data of cart
-    this.props.dispatch({
-      // type is must be
-      type: 'ADD_TO_CART',
-      // payload is optional
-      payload: this.props.product,
-    });
+    this.props.dispatch(actionAddToCart(this.props.product));
   };
   render() {
     let {product} = this.props;
@@ -29,9 +25,7 @@ export class ProductItem extends Component {
         />
         <Text> Name: {product.name}</Text>
         <Text> Price: {product.price}</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.props.setProduct(product)}>
+        <TouchableOpacity style={styles.button} onPress={this.addToCart}>
           <Text>Add to Cart</Text>
         </TouchableOpacity>
       </View>
@@ -68,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     setProduct: product => {
       dispatch({
@@ -80,7 +74,4 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-export default connect(
-  null,
-  mapDispatchToProps,
-)(ProductItem);
+export default connect()(ProductItem);
