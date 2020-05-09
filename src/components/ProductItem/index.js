@@ -29,7 +29,9 @@ export class ProductItem extends Component {
         />
         <Text> Name: {product.name}</Text>
         <Text> Price: {product.price}</Text>
-        <TouchableOpacity style={styles.button} onPress={this.addToCart}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.props.setProduct(product)}>
           <Text>Add to Cart</Text>
         </TouchableOpacity>
       </View>
@@ -55,16 +57,30 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     height: 170,
-    width: 100,
+    width: '100%',
   },
   button: {
     alignItems: 'center',
     backgroundColor: '#00ffff',
     padding: 10,
     margin: 10,
-    width: '95%',  
+    width: '95%',
     borderRadius: 30,
   },
 });
-
-export default connect()(ProductItem);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setProduct: product => {
+      dispatch({
+        // type is must be
+        type: 'ADD_TO_CART',
+        // payload is optional
+        payload: product,
+      });
+    },
+  };
+};
+export default connect(
+  null,
+  mapDispatchToProps,
+)(ProductItem);

@@ -6,9 +6,9 @@ import {withNavigation} from '@react-navigation/compat';
 import {connect} from 'react-redux';
 
 export class CartButton extends Component {
-  state={
-    productTotal: 0
-  }
+  state = {
+    productTotal: 0,
+  };
   goToCart = () => {
     this.props.dispatch({
       type: 'SHOW_CART_ITEM',
@@ -20,28 +20,33 @@ export class CartButton extends Component {
       <TouchableOpacity onPress={this.goToCart} style={styles.container}>
         <Icon name="shopping-cart" size={20} />
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>{this.props.productTotal  +1}</Text>
+          <Text style={styles.badgeText}>
+            {this.countsProducts()}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   }
 
-  componentDidUpdate=(prevProps)=>{
-    if(this.countsProduct(prevProps.cartList) > this.countsProduct(this.props.cartList)){
-      this.setState({
-        productTotal: this.countsProduct(this.props.cartList)
-      })
-    }
-
-  }
-  countsProduct = (cartList)=>{
+  //   componentDidMount = prevProps => {
+  //     if (
+  //       this.countsProduct(prevProps.cartList) >
+  //       this.countsProduct(this.props.cartList)
+  //     ) {
+  //       this.setState({
+  //         productTotal: this.countsProduct(this.props.cartList),
+  //       });
+  //     }
+  //   };
+  countsProducts = () => {
     let count = 0;
-    if(cartList.length > 0){
-      cartList.map(item =>count+=item.quantity);
+    if (this.props.cartList.length > 0) {
+      count = this.props.cartList.reduce((sum, currentItem) => {
+        return sum + currentItem.quantity;
+      }, 0);
     }
-    console.log(count);
     return count;
-  }
+  };
 }
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
     top: 2,
     right: 2,
     backgroundColor: '#ff0000',
-    width: 15,
+    width: 20,
     height: 15,
     borderRadius: 20,
   },
@@ -66,10 +71,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
-  return {
-    cartList: state.carts,
-  };
-};
+// es5
+// const mapStateToProps = state => {
+//   return {
+//     cartList: state.carts,
+//   };
+// };
 
-export default connect(mapStateToProps)(withNavigation(CartButton));
+// es6
+const mapStateToProps = (state) => ({
+  cartList: state.carts,
+});
+
+export default withNavigation(connect(mapStateToProps)(CartButton));
