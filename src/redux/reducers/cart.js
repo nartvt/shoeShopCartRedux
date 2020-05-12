@@ -21,16 +21,15 @@ const reducer = (state = initialState, action) => {
       return [...state];
     case DECREASE_QUANTITY:
       if (state.length >= 0) {
-        index = state.findIndex(item => item.product.id === action.payload.id);
+        index = state.findIndex(item => item.product.id === action.payload);
         state[index] = {...state[index], quantity: --state[index].quantity};
       }
       return [...state];
     case INCREASE_QUANTITY:
-      index = state.findIndex(item => item.product.id === action.payload.id);
+      index = state.findIndex(item => item.product.id === action.payload);
       state[index] = {...state[index], quantity: ++state[index].quantity};
       return [...state];
     case REMOVE_CART_ITEM:
-      console.log('REMOVE_CART_ITEM: ', action.payload);
       index = state.findIndex(item => item.product.id === action.payload.id);
       state.splice(index, 1);
       action.payload.callBack && action.payload.callBack();

@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {actionAddToCart} from '../../redux/actions';
 export class ProductItem extends Component {

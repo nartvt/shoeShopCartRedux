@@ -20,9 +20,7 @@ export class CartButton extends Component {
       <TouchableOpacity onPress={this.goToCart} style={styles.container}>
         <Icon name="shopping-cart" size={20} />
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>
-            {this.countsProducts()}
-          </Text>
+          <Text style={styles.badgeText}>{this.countsProducts()}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -79,7 +77,7 @@ const styles = StyleSheet.create({
 // };
 
 // es6
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   cartList: state.carts,
 });
 

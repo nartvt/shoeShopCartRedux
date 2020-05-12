@@ -15,14 +15,19 @@ export class CartItem extends Component {
   increaseCartItem = () => {
     this.props.dispatch(actionIncreaseQuantity(this.props.item.product.id));
   };
-  showAlert = () => {
+  showAlert = id => {
     Alert.alert('Confirmation', 'Make sure for delete item ?', [
       {text: 'Cancel', onPress: () => {}},
-      {text: 'OK', onPress: () => {}},
+      {
+        text: 'OK',
+        onPress: () => {
+          this.removeItem();
+        },
+      },
     ]);
   };
   handleDecrease = () => {
-    if (this.props.item.quantity > 0) {
+    if (this.props.item.quantity > 1) {
       this.decreaseCartItem();
     } else {
       this.showAlert();
@@ -49,25 +54,23 @@ export class CartItem extends Component {
       <View style={styles.cartItemContainer}>
         <Image source={{uri: item.product.img}} style={styles.image} />
         <View>
-          <Text>Product Name: {item.product.name}</Text>
+          <Text>Name: {item.product.name}</Text>
           <View style={styles.quantityButton}>
             <TouchableOpacity
-              style={{alignItems: 'center'}}
-              onPress={this.handleDecrease}>
-              <Text style={styles.buttonStyle}>-</Text>
+              onPress={this.handleDecrease}
+              style={styles.actionButton('gray', 30, 30)}>
+              <Text>-</Text>
             </TouchableOpacity>
             <Text style={{margin: 10, fontSize: 10}}>{item.quantity}</Text>
-            <TouchableOpacity onPress={this.increaseCartItem}>
-              <Text style={styles.buttonStyle}>+</Text>
+            <TouchableOpacity
+              onPress={this.increaseCartItem}
+              style={styles.actionButton('gray', 30, 30)}>
+              <Text>+</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.removeItem}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: 'red',
-                }}>
-                X
-              </Text>
+            <TouchableOpacity
+              onPress={this.removeItem}
+              style={styles.actionButton('red', 30, 30)}>
+              <Text>Del</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -75,6 +78,16 @@ export class CartItem extends Component {
     );
   }
 }
+const buttonStyles = (backgroundColor, width, height) => {
+  return {
+    margin: 15,
+    backgroundColor,
+    borderRadius: 50,
+    width,
+    height,
+    justifyContent: 'center',
+  };
+};
 const styles = StyleSheet.create({
   cartItemContainer: {
     flexDirection: 'row',
@@ -84,6 +97,15 @@ const styles = StyleSheet.create({
     height: 50,
     marginRight: 30,
   },
+  actionButton: (backgroundColor, width, height) => ({
+    margin: 15,
+    backgroundColor,
+    borderRadius: 50,
+    width,
+    height,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }),
   buttonStyle: {
     fontSize: 20,
     backgroundColor: 'grey',

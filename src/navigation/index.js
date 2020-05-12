@@ -11,7 +11,7 @@ const AppContainer = () => (
   <NavigationContainer>
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name="Sneakers"
         component={HomeScreen}
         options={{
           headerRight: () => <CartButton />,
